@@ -1,0 +1,430 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		083DF4061FE17F3700368956 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF4051FE17F3700368956 /* AppDelegate.m */; };
+		083DF40E1FE17F3700368956 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 083DF40D1FE17F3700368956 /* Assets.xcassets */; };
+		083DF4111FE17F3700368956 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 083DF40F1FE17F3700368956 /* LaunchScreen.storyboard */; };
+		083DF4141FE17F3700368956 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF4131FE17F3700368956 /* main.m */; };
+		083DF41C1FE1810C00368956 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF41B1FE1810C00368956 /* LoginViewController.m */; };
+		083DF4211FE2625700368956 /* EmmmContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF4201FE2625700368956 /* EmmmContactCell.m */; };
+		083DF4241FE2644500368956 /* EmmmContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF4231FE2644500368956 /* EmmmContact.m */; };
+		083DF4271FE2721100368956 /* EmmmMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF4261FE2721100368956 /* EmmmMainViewController.m */; };
+		0857C1511FE60957008B205F /* EmmmAttachmentWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */; };
+		08FB98651FE3AA7A00EC5AFC /* EmmmChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */; };
+		44F23131263126A09317A748 /* libPods-emmmChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3FD45190D122A1D99D86487 /* libPods-emmmChat.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		083DF4011FE17F3700368956 /* emmmChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = emmmChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		083DF4041FE17F3700368956 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		083DF4051FE17F3700368956 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		083DF40D1FE17F3700368956 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		083DF4101FE17F3700368956 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		083DF4121FE17F3700368956 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		083DF4131FE17F3700368956 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		083DF41A1FE1810C00368956 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		083DF41B1FE1810C00368956 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		083DF41F1FE2625700368956 /* EmmmContactCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmContactCell.h; sourceTree = "<group>"; };
+		083DF4201FE2625700368956 /* EmmmContactCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmContactCell.m; sourceTree = "<group>"; };
+		083DF4221FE2644500368956 /* EmmmContact.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmContact.h; sourceTree = "<group>"; };
+		083DF4231FE2644500368956 /* EmmmContact.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmContact.m; sourceTree = "<group>"; };
+		083DF4251FE2721100368956 /* EmmmMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmMainViewController.h; sourceTree = "<group>"; };
+		083DF4261FE2721100368956 /* EmmmMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmMainViewController.m; sourceTree = "<group>"; };
+		0857C14F1FE60957008B205F /* EmmmAttachmentWrapperView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmAttachmentWrapperView.h; sourceTree = "<group>"; };
+		0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmAttachmentWrapperView.m; sourceTree = "<group>"; };
+		08FB98631FE3AA7A00EC5AFC /* EmmmChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmChatViewController.h; sourceTree = "<group>"; };
+		08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmChatViewController.m; sourceTree = "<group>"; };
+		A3FD45190D122A1D99D86487 /* libPods-emmmChat.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-emmmChat.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCECEF8252F9052EEB860F6A /* Pods-emmmChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-emmmChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-emmmChat/Pods-emmmChat.debug.xcconfig"; sourceTree = "<group>"; };
+		E1DF28D318D5CE11994804D6 /* Pods-emmmChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-emmmChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-emmmChat/Pods-emmmChat.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		083DF3FE1FE17F3700368956 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44F23131263126A09317A748 /* libPods-emmmChat.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		083DF3F81FE17F3700368956 = {
+			isa = PBXGroup;
+			children = (
+				083DF4031FE17F3700368956 /* emmmChat */,
+				083DF4021FE17F3700368956 /* Products */,
+				83182D95D4F1A771A0F74C73 /* Pods */,
+				4F9071219AE6C2C15D1728F3 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		083DF4021FE17F3700368956 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				083DF4011FE17F3700368956 /* emmmChat.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		083DF4031FE17F3700368956 /* emmmChat */ = {
+			isa = PBXGroup;
+			children = (
+				083DF4041FE17F3700368956 /* AppDelegate.h */,
+				083DF4051FE17F3700368956 /* AppDelegate.m */,
+				083DF41A1FE1810C00368956 /* LoginViewController.h */,
+				083DF41B1FE1810C00368956 /* LoginViewController.m */,
+				083DF4251FE2721100368956 /* EmmmMainViewController.h */,
+				083DF4261FE2721100368956 /* EmmmMainViewController.m */,
+				08FB98631FE3AA7A00EC5AFC /* EmmmChatViewController.h */,
+				08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */,
+				0857C14F1FE60957008B205F /* EmmmAttachmentWrapperView.h */,
+				0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */,
+				083DF41F1FE2625700368956 /* EmmmContactCell.h */,
+				083DF4201FE2625700368956 /* EmmmContactCell.m */,
+				083DF4221FE2644500368956 /* EmmmContact.h */,
+				083DF4231FE2644500368956 /* EmmmContact.m */,
+				083DF40D1FE17F3700368956 /* Assets.xcassets */,
+				083DF40F1FE17F3700368956 /* LaunchScreen.storyboard */,
+				083DF4121FE17F3700368956 /* Info.plist */,
+				083DF4131FE17F3700368956 /* main.m */,
+			);
+			path = emmmChat;
+			sourceTree = "<group>";
+		};
+		4F9071219AE6C2C15D1728F3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A3FD45190D122A1D99D86487 /* libPods-emmmChat.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		83182D95D4F1A771A0F74C73 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DCECEF8252F9052EEB860F6A /* Pods-emmmChat.debug.xcconfig */,
+				E1DF28D318D5CE11994804D6 /* Pods-emmmChat.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		083DF4001FE17F3700368956 /* emmmChat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 083DF4171FE17F3700368956 /* Build configuration list for PBXNativeTarget "emmmChat" */;
+			buildPhases = (
+				ABFF0879054291FE498BA81D /* [CP] Check Pods Manifest.lock */,
+				083DF3FD1FE17F3700368956 /* Sources */,
+				083DF3FE1FE17F3700368956 /* Frameworks */,
+				083DF3FF1FE17F3700368956 /* Resources */,
+				29DDBC8E40D7BB4FB6A2460E /* [CP] Embed Pods Frameworks */,
+				6CCDB6DBB192A71CA0CEF909 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = emmmChat;
+			productName = emmmChat;
+			productReference = 083DF4011FE17F3700368956 /* emmmChat.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		083DF3F91FE17F3700368956 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "李嘉银";
+				TargetAttributes = {
+					083DF4001FE17F3700368956 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 083DF3FC1FE17F3700368956 /* Build configuration list for PBXProject "emmmChat" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 083DF3F81FE17F3700368956;
+			productRefGroup = 083DF4021FE17F3700368956 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				083DF4001FE17F3700368956 /* emmmChat */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		083DF3FF1FE17F3700368956 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				083DF4111FE17F3700368956 /* LaunchScreen.storyboard in Resources */,
+				083DF40E1FE17F3700368956 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		29DDBC8E40D7BB4FB6A2460E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-emmmChat/Pods-emmmChat-frameworks.sh",
+				"${PODS_ROOT}/Reveal-SDK/RevealServer-11/iOS/RevealServer.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RevealServer.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-emmmChat/Pods-emmmChat-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6CCDB6DBB192A71CA0CEF909 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-emmmChat/Pods-emmmChat-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ABFF0879054291FE498BA81D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-emmmChat-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		083DF3FD1FE17F3700368956 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				083DF41C1FE1810C00368956 /* LoginViewController.m in Sources */,
+				083DF4271FE2721100368956 /* EmmmMainViewController.m in Sources */,
+				083DF4211FE2625700368956 /* EmmmContactCell.m in Sources */,
+				083DF4141FE17F3700368956 /* main.m in Sources */,
+				08FB98651FE3AA7A00EC5AFC /* EmmmChatViewController.m in Sources */,
+				083DF4061FE17F3700368956 /* AppDelegate.m in Sources */,
+				083DF4241FE2644500368956 /* EmmmContact.m in Sources */,
+				0857C1511FE60957008B205F /* EmmmAttachmentWrapperView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		083DF40F1FE17F3700368956 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				083DF4101FE17F3700368956 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		083DF4151FE17F3700368956 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		083DF4161FE17F3700368956 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		083DF4181FE17F3700368956 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DCECEF8252F9052EEB860F6A /* Pods-emmmChat.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LDVXT95SNR;
+				INFOPLIST_FILE = emmmChat/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = emmm.emmmChat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		083DF4191FE17F3700368956 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1DF28D318D5CE11994804D6 /* Pods-emmmChat.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LDVXT95SNR;
+				INFOPLIST_FILE = emmmChat/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = emmm.emmmChat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		083DF3FC1FE17F3700368956 /* Build configuration list for PBXProject "emmmChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				083DF4151FE17F3700368956 /* Debug */,
+				083DF4161FE17F3700368956 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		083DF4171FE17F3700368956 /* Build configuration list for PBXNativeTarget "emmmChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				083DF4181FE17F3700368956 /* Debug */,
+				083DF4191FE17F3700368956 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 083DF3F91FE17F3700368956 /* Project object */;
+}
