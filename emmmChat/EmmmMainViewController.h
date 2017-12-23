@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <Masonry.h>
+#import "MyDataBase.h"
 #import "EmmmContactCell.h"
 #import "EmmmContact.h"
 #import "EmmmChatViewController.h"
 
 @interface EmmmMainViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
+@property(strong,nonatomic)NSString * userName;
 
 @end

@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 
+
 @interface AppDelegate ()
 
 @end
@@ -20,8 +21,20 @@
     LoginViewController * vc=[[LoginViewController alloc]init];
     UINavigationController * nvc=[[UINavigationController alloc]initWithRootViewController:vc];
     self.window.rootViewController = nvc;
-//    nvc.navigationBar.hidden=YES;
+    nvc.navigationBar.hidden=YES;
     [self.window makeKeyAndVisible];
+    AFNetworkReachabilityManager *reachabilityManager = [AFNetworkReachabilityManager sharedManager];
+    [reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        if (status==AFNetworkReachabilityStatusNotReachable) {
+            UIAlertController * alert=[UIAlertController alertControllerWithTitle:@"无连接" message:@"emmm网络似乎有问题" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            [alert addAction:defaultAction];
+            [nvc presentViewController:alert animated:YES completion:nil];
+            NSLog(@"%@",nvc.presentingViewController);
+        }
+    }];
+    [reachabilityManager startMonitoring];
     return YES;
 }
 

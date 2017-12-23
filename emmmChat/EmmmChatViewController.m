@@ -18,6 +18,8 @@
 @property(strong,nonatomic)UIView * bottomMessageView;
 @property(strong,nonatomic)UITextView * messageInputView;
 @property(strong,nonatomic)UIView * btnPopView;
+@property(strong,nonatomic)NSArray * btnArr;
+@property BOOL btnsAlreadyPoped;
 @end
 
 @implementation EmmmChatViewController
@@ -68,7 +70,8 @@
     self.messageInputView.backgroundColor=lightBlueColor;
     self.messageInputView.delegate=self;
     self.messageInputView.layer.cornerRadius=10.f;
-    [self.messageInputView setFont:[UIFont systemFontOfSize:12]];
+    self.messageInputView.layoutManager.allowsNonContiguousLayout=YES;
+    [self.messageInputView setFont:[UIFont systemFontOfSize:13]];
     [self.bottomMessageView addSubview:self.messageInputView];
     [self.bottomMessageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
@@ -101,6 +104,10 @@
 }
 //弹出更多按钮
 -(void)PopMoreBtn{
+    CGFloat edgeMargin=15;
+    CGFloat btnAmounts=5;
+    CGFloat btnSize=45;
+    CGFloat betweenMargin=([UIScreen mainScreen].bounds.size.width-2*edgeMargin-5*btnSize)/(btnAmounts-1);
     if (!self.btnPopView) {
         self.btnPopView=[[UIView alloc]init];
         [self.bottomMessageView addSubview:self.btnPopView];
@@ -111,17 +118,68 @@
             make.height.equalTo(@(45));
         }];
         self.btnPopView.backgroundColor=[UIColor clearColor];
+        EmmmAttachmentWrapperView * btn1=[[EmmmAttachmentWrapperView alloc]initWithImage:[UIImage imageNamed:@"照片"]];
+        EmmmAttachmentWrapperView * btn2=[[EmmmAttachmentWrapperView alloc]initWithImage:[UIImage imageNamed:@"拍照"]];
+        EmmmAttachmentWrapperView * btn3=[[EmmmAttachmentWrapperView alloc]initWithImage:[UIImage imageNamed:@"语音"]];
+        EmmmAttachmentWrapperView * btn4=[[EmmmAttachmentWrapperView alloc]initWithImage:[UIImage imageNamed:@"视频"]];
+        EmmmAttachmentWrapperView * btn5=[[EmmmAttachmentWrapperView alloc]initWithImage:[UIImage imageNamed:@"红包"]];
+        self.btnArr=@[btn1,btn2,btn3,btn4,btn5];
+        for (EmmmAttachmentWrapperView * btn in self.btnArr) {
+            [self.btnPopView addSubview:btn];
+            [UIView animateWithDuration:1.0 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseIn animations:^{
+                [btn setFrame:CGRectMake(edgeMargin+[self.btnArr indexOfObject:btn]*(betweenMargin+btnSize), 0, btnSize, btnSize)];
+            } completion:nil];
+            
+        }
+        self.btnsAlreadyPoped=YES;
     }
+    else{
+        if (self.btnsAlreadyPoped==YES) {
+            for (EmmmAttachmentWrapperView * btn in self.btnArr) {
+                [self.btnPopView addSubview:btn];
+                [UIView animateWithDuration:1.0 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    [btn setFrame:CGRectMake(-2*btnSize, 0, btnSize, btnSize)];
+                } completion:nil];
+            }
+            self.btnsAlreadyPoped=NO;
+        }
+        else{
+            for (EmmmAttachmentWrapperView * btn in self.btnArr) {
+                [self.btnPopView addSubview:btn];
+                [UIView animateWithDuration:1.0 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseIn animations:^{
+                    [btn setFrame:CGRectMake(edgeMargin+[self.btnArr indexOfObject:btn]*(betweenMargin+btnSize), 0, btnSize, btnSize)];
+                } completion:nil];
+            }
+            self.btnsAlreadyPoped=YES;
+        }
+    }
+    
 }
 //监控textview改变
 -(void)textViewDidChange:(UITextView *)textView{//TextView自适应尺寸
+    //保存包裹textview的view的y值
+    float wrappperViewY=self.bottomMessageView.frame.origin.y;
+    float originalHeight=textView.frame.size.height;
+    //获取合适的高度
     float textViewHeight =  [self.messageInputView sizeThatFits:CGSizeMake(self.messageInputView.frame.size.width, MAXFLOAT)].height;
     if (textViewHeight <= MAXHEIGHTofInputView && textViewHeight > 32.5) {
         CGRect frame= self.messageInputView.frame;
         frame.size.height=textViewHeight;
         self.messageInputView.frame = frame;
-        [self.bottomMessageView layoutIfNeeded];
+        [self.view layoutIfNeeded];
     }
+    else if(textViewHeight < 32.5){
+        CGRect frame= self.messageInputView.frame;
+        frame.size.height=32.5;
+        self.messageInputView.frame = frame;
+        [self.view layoutIfNeeded];
+    }
+//    NSLog(@"%@",NSStringFromCGRect(self.bottomMessageView.frame));
+    //
+    float changedHeight=self.messageInputView.frame.size.height-originalHeight;
+    CGRect frame=self.bottomMessageView.frame;
+    frame.origin.y=wrappperViewY-changedHeight;
+    self.bottomMessageView.frame=frame;
 }
 //弹出键盘时
 -(void)keyboardWillShow:(NSNotification *)notification{
@@ -131,6 +189,7 @@
     CGRect frame=self.bottomMessageView.frame;
     frame.origin.y=keyboardRect.origin.y-frame.size.height;
     self.bottomMessageView.frame=frame;
+//    NSLog(@"%@",NSStringFromCGRect(frame));
 }
 //返回键
 -(void)returnToMain{
@@ -149,17 +208,17 @@
 //设置右滑返回
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    self.navigationController.navigationBar.hidden=NO;
-//    [self.navigationController setNavigationBarHidden:NO animated:animated];
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = YES;
     }
-     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
+//     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
 }
 //识别点击注销textview
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
-    if ([self.messageInputView isFirstResponder]) {
-        [self.messageInputView resignFirstResponder];
+    if (![touch.view isDescendantOfView:self.messageInputView]) {
+        if ([self.messageInputView isFirstResponder]) {
+            [self.messageInputView resignFirstResponder];
+        }
     }
     return NO;
 }

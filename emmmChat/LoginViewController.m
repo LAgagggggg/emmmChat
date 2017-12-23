@@ -5,7 +5,7 @@
 //  Created by 李嘉银 on 13/12/2017.
 //  Copyright © 2017 李嘉银. All rights reserved.
 //
-#define darkBlueColor [UIColor colorWithRed:55/255. green:125/255. blue:255/255. alpha:1]
+#define darkBlueColor [UIColor colorWithRed:70/255. green:128/255. blue:246/255. alpha:1]
 
 #import "LoginViewController.h"
 
@@ -13,7 +13,11 @@
 @property(strong,nonatomic)UITextField * accountTextField;
 @property(strong,nonatomic)UITextField * passwordTextField;
 @property(strong,nonatomic)UIButton * submitBtn;
+@property(strong,nonatomic)UIButton * switchToLoginBtn;
+@property(strong,nonatomic)UIButton * switchToRegisterBtn;
+@property(strong,nonatomic)UIView * switchUnderLine;
 @property BOOL loginSuccess;
+@property BOOL loginOrRegister; //1为登陆，0为注册
 @end
 
 @implementation LoginViewController
@@ -31,29 +35,43 @@
         make.height.equalTo(@(110.f));
     }];
     //中部登陆/注册切换
-    UIView *loginBtn=[[UIView alloc]init];
-    UIView *registerBtn=[[UIView alloc]init];
-    loginBtn.backgroundColor=[UIColor blueColor];
-    registerBtn.backgroundColor=[UIColor redColor];
-    [self.view addSubview:loginBtn];
-    [self.view addSubview:registerBtn];
-    [loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.loginOrRegister=YES;
+    self.switchToLoginBtn=[UIButton buttonWithType:UIButtonTypeSystem];
+    self.switchToRegisterBtn=[UIButton buttonWithType:UIButtonTypeSystem];
+    [self.view addSubview:self.switchToRegisterBtn];
+    [self.view addSubview:self.switchToLoginBtn];
+    self.switchToLoginBtn.backgroundColor=darkBlueColor;
+    self.switchToRegisterBtn.backgroundColor=[UIColor grayColor];
+    [self.switchToLoginBtn addTarget:self action:@selector(SwitchToLogin) forControlEvents:UIControlEventTouchUpInside];
+    [self.switchToRegisterBtn addTarget:self action:@selector(SwitchToRegister) forControlEvents:UIControlEventTouchUpInside];
+    [self.switchToLoginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(iconImageView.mas_bottom).with.offset(52);
         make.left.equalTo(self.view.mas_left).with.offset(98);
-        make.width.equalTo(registerBtn).with.offset(0);
+        make.width.equalTo(self.switchToRegisterBtn.mas_width).with.offset(0);
         make.height.equalTo(@(30.f));
     }];
-    [registerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.switchToRegisterBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(iconImageView.mas_bottom).with.offset(52);
-        make.left.equalTo(loginBtn.mas_right).with.offset(0);
-        make.right.equalTo(self.view.mas_right).with.offset(-64.50);
+        make.left.equalTo(self.switchToLoginBtn.mas_right).with.offset(0);
+        make.right.equalTo(self.view.mas_right).with.offset(-98);
         make.height.equalTo(@(30.f));
+    }];
+    self.switchToRegisterBtn.layer.affineTransform=CGAffineTransformMakeScale(0.8, 0.8);
+    // 切换按钮的下划线
+    self.switchUnderLine=[[UIView alloc]init];
+    self.switchUnderLine.backgroundColor=[UIColor blueColor];
+    [self.view addSubview:self.switchUnderLine];
+    [self.switchUnderLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.switchToLoginBtn.mas_bottom);
+        make.left.equalTo(self.switchToLoginBtn.mas_left);
+        make.right.equalTo(self.switchToLoginBtn.mas_right);
+        make.height.equalTo(@(3));
     }];
     // 输入框
     UIView * inputView=[[UIView alloc]init];
     [self.view addSubview:inputView];
     [inputView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(registerBtn.mas_bottom).with.offset(44);
+        make.top.equalTo(self.switchToRegisterBtn.mas_bottom).with.offset(44);
         make.left.equalTo(self.view.mas_left).with.offset(33);
         make.right.equalTo(self.view.mas_right).with.offset(-33);
         make.height.equalTo(@(89.f));
@@ -98,6 +116,8 @@
     self.passwordTextField.autocapitalizationType=UITextAutocapitalizationTypeNone;
     self.accountTextField.delegate=self;
     self.passwordTextField.delegate=self;
+    self.accountTextField.placeholder=@"请输入账号";
+    self.passwordTextField.placeholder=@"请输入密码";
     self.accountTextField.clearButtonMode=UITextFieldViewModeWhileEditing;
     self.passwordTextField.clearButtonMode=UITextFieldViewModeWhileEditing;
     self.accountTextField.returnKeyType=UIReturnKeyNext;
@@ -117,7 +137,10 @@
     }];
     //确定按钮
     self.submitBtn=[UIButton buttonWithType:UIButtonTypeSystem];
-    [self.submitBtn setTitle:@"Login" forState:UIControlStateNormal];
+    self.submitBtn.backgroundColor=darkBlueColor;
+    [self.submitBtn setTitle:@"登陆" forState:UIControlStateNormal];
+    [self.submitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.submitBtn setFont:[UIFont systemFontOfSize:20 weight:UIFontWeightBold]];
     [self.view addSubview:self.submitBtn];
     self.submitBtn.layer.borderColor=darkBlueColor.CGColor;
     self.submitBtn.layer.borderWidth=2.0f;
@@ -131,6 +154,42 @@
     }];
     [self.submitBtn addTarget:self action:@selector(TryLogin) forControlEvents:UIControlEventTouchUpInside];
     return self;
+}
+
+-(void)SwitchToLogin{
+    self.loginOrRegister=YES;
+    CGPoint center=self.switchUnderLine.center;
+    center.x=self.switchToLoginBtn.center.x;
+    [UIView animateWithDuration:0.4 animations:^{
+        self.switchUnderLine.center=center;
+        self.switchToLoginBtn.layer.affineTransform=CGAffineTransformIdentity;
+        self.switchUnderLine.layer.affineTransform=CGAffineTransformIdentity;
+        self.switchToRegisterBtn.layer.affineTransform=CGAffineTransformMakeScale(0.8, 0.8);
+        self.switchToRegisterBtn.backgroundColor=[UIColor grayColor];
+        self.switchToLoginBtn.backgroundColor=darkBlueColor;
+        [self.submitBtn setTitle:@"登陆" forState:UIControlStateNormal];
+        self.accountTextField.placeholder=@"请输入账号";
+        self.passwordTextField.placeholder=@"请输入密码";
+    }];
+}
+
+-(void)SwitchToRegister{
+    self.loginOrRegister=NO;
+    
+//    CGPoint center=self.switchUnderLine.center;
+//    center.x=self.switchToRegisterBtn.center.x;
+    [UIView animateWithDuration:0.4 animations:^{
+//        self.switchUnderLine.center=center;
+        self.switchToRegisterBtn.layer.affineTransform=CGAffineTransformIdentity;
+        self.switchToLoginBtn.layer.affineTransform=CGAffineTransformMakeScale(0.8, 0.8);
+        self.switchUnderLine.layer.affineTransform=CGAffineTransformMakeTranslation(self.switchToRegisterBtn.center.x-self.switchToLoginBtn.center.x, 0);
+        self.switchToRegisterBtn.backgroundColor=darkBlueColor;
+        self.switchToLoginBtn.backgroundColor=[UIColor grayColor];
+        [self.submitBtn setTitle:@"注册" forState:UIControlStateNormal];
+        self.accountTextField.placeholder=@"请设置账号";
+        self.passwordTextField.placeholder=@"请设置密码";
+    }];
+    
 }
 
 -(void)TryLogin{
@@ -161,7 +220,7 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+//    [self.navigationController setNavigationBarHidden:YES animated:animated];
     NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
     self.loginSuccess=[defaults boolForKey:@"loginSuccess"];
     if (self.loginSuccess) {

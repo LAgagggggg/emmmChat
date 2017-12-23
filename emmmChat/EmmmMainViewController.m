@@ -16,6 +16,8 @@
 @property(strong,nonatomic)UITableView * contactTableView;
 @property(strong,nonatomic)UIView * headerSearchView;
 @property(strong,nonatomic)UITextField * searchBar;
+@property(strong,nonatomic)NSMutableArray<EmmmContact *> * contactArr;
+@property MyDataBase * db;
 @end
 
 static NSString * const reuseIdentifier = @"Cell";
@@ -102,7 +104,23 @@ static float scrollStartPosition;
     //设置tableview的offset
     self.contactTableView.contentInset = UIEdgeInsetsMake(tableViewStartPosition, 0, 0, 0);
     scrollStartPosition=self.contactTableView.contentOffset.y;
+    self.db=[MyDataBase sharedInstance];
     return self;
+}
+
+-(NSMutableArray *)contactArr{
+    if (!_contactArr) {
+        if ([self.db open])
+        {
+            NSString * sql=@"CREATE TABLE IF NOT EXISTS contactOf%@ (name text PRIMARY KEY AUTOINCREMENT, iconImage blob, lastMessage text,lastMessageTime text,unReaderCount integer);";
+            BOOL result = [self.db executeUpdateWithFormat:sql,self.userName];
+            if (result)
+            {
+                NSLog(@"创建表成功");
+            }
+        }
+    }
+    return _contactArr;
 }
 
 -(void)PullMenu{// 弹出左边菜单
@@ -184,5 +202,31 @@ static float scrollStartPosition;
         self.topView.layer.affineTransform=CGAffineTransformMakeTranslation(0,-(disappearOffset*2/3));
     }
 }
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    for (UIView *subview in tableView.subviews)
+    {
+        if ([subview isKindOfClass:NSClassFromString(@"UISwipeActionPullView")] )
+        {
+            subview.backgroundColor=[UIColor clearColor];
+            subview.subviews[0].layer.cornerRadius=10.f;
+            subview.subviews[0].layer.masksToBounds=YES;
+        }
+    }
+    return YES;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+
 
 @end
