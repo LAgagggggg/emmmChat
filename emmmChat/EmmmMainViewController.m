@@ -7,16 +7,21 @@
 //
 #define tableViewStartPosition (127.f-[[UIApplication sharedApplication] statusBarFrame].size.height)
 #define lightBlueColor [UIColor colorWithRed:225/255. green:238/255. blue:253/255. alpha:1]
+#define animationDURATION 0.4
 
 #import "EmmmMainViewController.h"
 
 @interface EmmmMainViewController ()
+@property(strong,nonatomic)UIView * mainWrapperView;
 @property(strong,nonatomic)UIView * topView;
 @property(strong,nonatomic)UIView * switcherWrapper;
 @property(strong,nonatomic)UITableView * contactTableView;
 @property(strong,nonatomic)UIView * headerSearchView;
 @property(strong,nonatomic)UITextField * searchBar;
 @property(strong,nonatomic)NSMutableArray<EmmmContact *> * contactArr;
+@property(strong,nonatomic)NSString * tableName;
+@property(strong,nonatomic)UIImage * myIcon;
+@property(strong,nonatomic)EmmmPullMenuView * pullMenuView;
 @property MyDataBase * db;
 @end
 
@@ -24,9 +29,14 @@ static NSString * const reuseIdentifier = @"Cell";
 static float scrollStartPosition;
 @implementation EmmmMainViewController
 
--(instancetype)init{
+-(instancetype)initWithUserName:(NSString *)userName{
     self=[super init];
-    self.view.backgroundColor=[UIColor whiteColor];
+    self.userName=userName;
+    self.view.backgroundColor=[UIColor blackColor];
+    //设置一个view作为除侧拉菜单view外的父控件
+    self.mainWrapperView=[[UIView alloc]initWithFrame:self.view.frame];
+    self.mainWrapperView.backgroundColor=[UIColor whiteColor];
+    [self.view addSubview:self.mainWrapperView];
     //TableView
     self.contactTableView=[[UITableView alloc]init];
     self.contactTableView.delegate=self;
@@ -34,7 +44,7 @@ static float scrollStartPosition;
     self.contactTableView.separatorStyle=UITextBorderStyleNone;
     [self.contactTableView registerClass:[EmmmContactCell class] forCellReuseIdentifier:reuseIdentifier];
     self.contactTableView.backgroundColor=[UIColor clearColor];
-    [self.view addSubview:self.contactTableView];
+    [self.mainWrapperView addSubview:self.contactTableView];
     [self.contactTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset(0);
         make.bottom.equalTo(self.view.mas_bottom).with.offset(0);
@@ -72,7 +82,7 @@ static float scrollStartPosition;
     }];
     //顶部图标及切换按钮
     self.topView=[[UIView alloc]init];
-    [self.view addSubview:self.topView];
+    [self.mainWrapperView addSubview:self.topView];
     self.topView.backgroundColor=[UIColor clearColor];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.view.mas_top).with.offset([[UIApplication sharedApplication] statusBarFrame].size.height);
@@ -89,7 +99,7 @@ static float scrollStartPosition;
         make.height.equalTo(@(35));
         make.width.equalTo(@(148.f));
     }];
-    [topIconBtn addTarget:self action:@selector(PullMenu) forControlEvents:UIControlEventTouchUpInside];
+    [topIconBtn addTarget:self action:@selector(QuitLogin) forControlEvents:UIControlEventTouchUpInside];
         //切换按钮
     self.switcherWrapper=[[UIView alloc]init];
     [self.topView addSubview:self.switcherWrapper];
@@ -104,61 +114,107 @@ static float scrollStartPosition;
     //设置tableview的offset
     self.contactTableView.contentInset = UIEdgeInsetsMake(tableViewStartPosition, 0, 0, 0);
     scrollStartPosition=self.contactTableView.contentOffset.y;
-    self.db=[MyDataBase sharedInstance];
+    self.myIcon=[UIImage imageNamed:@"ScreenShot"];
+    //添加侧拉菜单
+    self.pullMenuView=[[EmmmPullMenuView alloc]init];
+    [self.view addSubview:self.pullMenuView];
+    UIPanGestureRecognizer * pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
+    [self.pullMenuView addGestureRecognizer:pan];
     return self;
 }
 
+-(void)pan:(UIPanGestureRecognizer *)pan{
+    CGPoint transP=[pan translationInView:self.pullMenuView];
+    if (pan.state==UIGestureRecognizerStateChanged) {
+        if (self.pullMenuView.frame.origin.x<=0) {
+            self.pullMenuView.transform=CGAffineTransformTranslate(self.pullMenuView.transform, transP.x, 0);
+        }
+        if(self.pullMenuView.frame.origin.x>0){
+            CGRect frame=self.pullMenuView.frame;
+            frame.origin.x=0;
+            [UIView animateWithDuration:animationDURATION animations:^{
+                self.pullMenuView.frame=frame;
+            }];
+        }
+    }
+    else if(pan.state==UIGestureRecognizerStateEnded){
+        CGRect frame=self.pullMenuView.frame;
+        if(self.pullMenuView.frame.origin.x<-self.pullMenuView.setedPushWidth/2){
+            frame.origin.x=-self.pullMenuView.setedPushWidth;
+        }
+        else{
+            frame.origin.x=0;
+        }
+        [UIView animateWithDuration:animationDURATION animations:^{
+            self.pullMenuView.frame=frame;
+        }];
+    }
+    CGFloat dimRatio=0.5+(self.pullMenuView.frame.origin.x/-self.pullMenuView.setedPushWidth)*0.5;
+    [UIView animateWithDuration:animationDURATION animations:^{
+        self.mainWrapperView.alpha=dimRatio;
+    }];
+    [pan setTranslation:CGPointZero inView:self.pullMenuView];
+}
+
 -(NSMutableArray *)contactArr{
-    if (!_contactArr) {
+    if (_contactArr==nil) {
+        _contactArr=[[NSMutableArray alloc]init];
+        self.tableName=[@"contactOf" stringByAppendingString:self.userName];
+        self.db=[MyDataBase sharedInstance];
         if ([self.db open])
         {
-            NSString * sql=@"CREATE TABLE IF NOT EXISTS contactOf%@ (name text PRIMARY KEY AUTOINCREMENT, iconImage blob, lastMessage text,lastMessageTime text,unReaderCount integer);";
-            BOOL result = [self.db executeUpdateWithFormat:sql,self.userName];
+            NSString *sql=[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (name text, iconImage blob, lastMessage text,lastMessageTime text,unReaderCount integer);",self.tableName];
+            BOOL result = [self.db executeUpdate:sql];
             if (result)
             {
                 NSLog(@"创建表成功");
+            }
+            sql = [NSString stringWithFormat:@"SELECT * FROM %@",self.tableName];
+            FMResultSet *resultSet = [self.db executeQuery:sql];
+            while ([resultSet next]) {
+                EmmmContact * contact=[[EmmmContact alloc]init];
+                contact.name=[resultSet stringForColumn:@"name"];
+                contact.lastMessage=[resultSet stringForColumn:@"lastMessage"];
+                contact.lastMessageTime=[resultSet stringForColumn:@"lastMessageTime"];
+                NSData * imageData=[resultSet dataForColumn:@"iconImage"];
+//                NSLog(@"%@\n==================",imageData);
+                contact.iconImage=[UIImage imageWithData:imageData];
+                contact.unReaderCount=[resultSet intForColumn:@"unReaderCount"];
+                [self.contactArr addObject:contact];
             }
         }
     }
     return _contactArr;
 }
 
--(void)PullMenu{// 弹出左边菜单
+-(void)QuitLogin{
     NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
-    [defaults setBool:NO forKey:@"loginSuccess"];
-    [self.navigationController popViewControllerAnimated:YES]; 
+    [defaults setBool:NO forKey:@"loginSuccessJudge"];
+    [self.navigationController popViewControllerAnimated:YES];
+    LoginViewController * vc=[[LoginViewController alloc]init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
 }
+
 -(void)viewDidAppear:(BOOL)animated{
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    EmmmContact * contact=[[EmmmContact alloc]init];
-    contact.name=@"emmm";
-    contact.iconImage=[UIImage imageNamed:@"ScreenShot"];
-    contact.lastMessage=@"last message";
-    contact.lastMessageTime=@"3 minutes ago";
-    contact.unReaderCount=2;
+    EmmmContact * contact=self.contactArr[indexPath.row];
     EmmmContactCell * cell=[self.contactTableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     [cell SetWithContact:contact];
     return cell;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return self.contactArr.count;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -167,20 +223,28 @@ static float scrollStartPosition;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    EmmmContact * contact=[[EmmmContact alloc]init];
-    contact.name=@"emmm";
-    contact.iconImage=[UIImage imageNamed:@"ScreenShot"];
-    contact.lastMessage=@"last message";
-    contact.lastMessageTime=@"3 minutes ago";
-    contact.unReaderCount=2;
+    EmmmContact * contact=self.contactArr[indexPath.row];
     EmmmChatViewController * vc=[[EmmmChatViewController alloc]initWithContact:contact];
+    vc.myIcon=self.myIcon;
+    vc.userName=self.userName;
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     if (![touch.view isDescendantOfView:self.searchBar]&&[self.searchBar isFirstResponder]) {
         [self.searchBar resignFirstResponder];
     }
+    //设置菜单弹出时点击主界面菜单收回
+        if (self.pullMenuView.frame.origin.x!=-self.pullMenuView.setedPushWidth&&![touch.view isDescendantOfView:self.pullMenuView.actualMenuView]) {
+            CGRect frame=self.pullMenuView.frame;
+            frame.origin.x=-self.pullMenuView.setedPushWidth;
+            [UIView animateWithDuration:animationDURATION animations:^{
+                self.pullMenuView.frame=frame;
+                self.mainWrapperView.alpha=1;
+            }];
+            return YES;
+        }
     return NO;
 }
 
@@ -224,7 +288,7 @@ static float scrollStartPosition;
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [self.contactArr removeObjectAtIndex:indexPath.row];
 }
 
 

@@ -19,7 +19,7 @@
         NSString *doc =[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES)  lastObject];
         NSString *fileName = [doc stringByAppendingPathComponent:@"contact.sqlite"];
         db = [FMDatabase databaseWithPath:fileName];
-        NSLog(@"db---------\n%@",fileName);
+        NSLog(@"-----------db---------\n%@",fileName);
     });
     return db;
 }

@@ -10,9 +10,13 @@
 #import "EmmmContact.h"
 #import <Masonry.h>
 #import "EmmmAttachmentWrapperView.h"
+#import "EmmmChatTableViewTowardCell.h"
+#import "EmmmChatTableViewReceivedCell.h"
+#import "EmmmMessage.h"
 
-@interface EmmmChatViewController : UIViewController<UITextViewDelegate,UIGestureRecognizerDelegate>
-
+@interface EmmmChatViewController : UIViewController<UITextViewDelegate,UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
+@property(strong,nonatomic)UIImage * myIcon;
+@property(strong,nonatomic)NSString * userName;
 -(instancetype)initWithContact:(EmmmContact *)contact;
 
 @end

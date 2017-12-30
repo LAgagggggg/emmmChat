@@ -9,11 +9,14 @@
 #import <UIKit/UIKit.h>
 #import <Masonry.h>
 #import "MyDataBase.h"
+#import "LoginViewController.h"
 #import "EmmmContactCell.h"
 #import "EmmmContact.h"
 #import "EmmmChatViewController.h"
+#import "EmmmPullMenuView.h"
 
-@interface EmmmMainViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate>
+@interface EmmmMainViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIGestureRecognizerDelegate>
 @property(strong,nonatomic)NSString * userName;
+-(instancetype)initWithUserName:(NSString*)userName;
 
 @end

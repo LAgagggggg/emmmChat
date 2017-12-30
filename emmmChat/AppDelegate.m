@@ -18,11 +18,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window=[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    LoginViewController * vc=[[LoginViewController alloc]init];
-    UINavigationController * nvc=[[UINavigationController alloc]initWithRootViewController:vc];
+    NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
+    UINavigationController * nvc;
+    if ([defaults boolForKey:@"loginSuccessJudge"]) {
+        NSString * userName=[defaults objectForKey:@"loginSuccessUserName"];
+        EmmmMainViewController * vc=[[EmmmMainViewController alloc]initWithUserName:userName];
+        nvc=[[UINavigationController alloc]initWithRootViewController:vc];
+    }
+    else{
+        LoginViewController * vc=[[LoginViewController alloc]init];
+        nvc=[[UINavigationController alloc]initWithRootViewController:vc];
+    }
     self.window.rootViewController = nvc;
     nvc.navigationBar.hidden=YES;
     [self.window makeKeyAndVisible];
+    //检测网络状态
     AFNetworkReachabilityManager *reachabilityManager = [AFNetworkReachabilityManager sharedManager];
     [reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         if (status==AFNetworkReachabilityStatusNotReachable) {

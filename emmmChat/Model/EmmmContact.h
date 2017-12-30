@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MyDataBase.h"
 
 @interface EmmmContact : NSObject
 @property(strong,nonatomic)UIImage * iconImage;
@@ -15,4 +16,6 @@
 @property(strong,nonatomic)NSString * lastMessage;
 @property(strong,nonatomic)NSString * lastMessageTime;
 @property int unReaderCount;
+
+-(BOOL)WriteWithFMDB:(MyDataBase *)db andTableName:(NSString *)tableName;
 @end

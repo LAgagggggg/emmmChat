@@ -17,6 +17,7 @@
 @property(strong,nonatomic)UIButton * switchToRegisterBtn;
 @property(strong,nonatomic)UIView * switchUnderLine;
 @property BOOL loginSuccess;
+@property NSString * loginSuccessUserName;
 @property BOOL loginOrRegister; //1为登陆，0为注册
 @end
 
@@ -161,15 +162,16 @@
     CGPoint center=self.switchUnderLine.center;
     center.x=self.switchToLoginBtn.center.x;
     [UIView animateWithDuration:0.4 animations:^{
+        [self.submitBtn setTitle:@"登陆" forState:UIControlStateNormal];
+        self.accountTextField.placeholder=@"请输入账号";
+        self.passwordTextField.placeholder=@"请输入密码";
         self.switchUnderLine.center=center;
         self.switchToLoginBtn.layer.affineTransform=CGAffineTransformIdentity;
         self.switchUnderLine.layer.affineTransform=CGAffineTransformIdentity;
         self.switchToRegisterBtn.layer.affineTransform=CGAffineTransformMakeScale(0.8, 0.8);
         self.switchToRegisterBtn.backgroundColor=[UIColor grayColor];
         self.switchToLoginBtn.backgroundColor=darkBlueColor;
-        [self.submitBtn setTitle:@"登陆" forState:UIControlStateNormal];
-        self.accountTextField.placeholder=@"请输入账号";
-        self.passwordTextField.placeholder=@"请输入密码";
+        
     }];
 }
 
@@ -182,7 +184,7 @@
 //        self.switchUnderLine.center=center;
         self.switchToRegisterBtn.layer.affineTransform=CGAffineTransformIdentity;
         self.switchToLoginBtn.layer.affineTransform=CGAffineTransformMakeScale(0.8, 0.8);
-        self.switchUnderLine.layer.affineTransform=CGAffineTransformMakeTranslation(self.switchToRegisterBtn.center.x-self.switchToLoginBtn.center.x, 0);
+    self.switchUnderLine.layer.affineTransform=CGAffineTransformMakeTranslation(self.switchToRegisterBtn.center.x-self.switchToLoginBtn.center.x, 0);
         self.switchToRegisterBtn.backgroundColor=darkBlueColor;
         self.switchToLoginBtn.backgroundColor=[UIColor grayColor];
         [self.submitBtn setTitle:@"注册" forState:UIControlStateNormal];
@@ -197,35 +199,28 @@
     if([self.accountTextField.text isEqualToString:@"lagagggggg"]
        &&[self.passwordTextField.text isEqualToString:@"19970720"]){
         self.loginSuccess=1;
+        self.loginSuccessUserName=self.accountTextField.text;
     }
     else{
 
     }
     if (self.loginSuccess) {
         NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
-        [defaults setBool:self.loginSuccess forKey:@"loginSuccess"];
+        [defaults setBool:self.loginSuccess forKey:@"loginSuccessJudge"];
+        [defaults setObject:self.loginSuccessUserName forKey:@"loginSuccessUserName"];
         [self JumpToMainInterface];
     }
     
 }
 
 -(void)JumpToMainInterface{
-    EmmmMainViewController * mainInterface=[[EmmmMainViewController alloc]init];
+    EmmmMainViewController * mainInterface=[[EmmmMainViewController alloc]initWithUserName:self.loginSuccessUserName];
     [self.navigationController pushViewController:mainInterface animated:YES];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-}
-
--(void)viewWillAppear:(BOOL)animated{
-//    [self.navigationController setNavigationBarHidden:YES animated:animated];
-    NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
-    self.loginSuccess=[defaults boolForKey:@"loginSuccess"];
-    if (self.loginSuccess) {
-        [self JumpToMainInterface];
-    }
 }
 
 - (void)didReceiveMemoryWarning {

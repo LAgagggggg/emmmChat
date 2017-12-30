@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0836E0381FF72BAE004B2518 /* EmmmPullMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0836E0371FF72BAE004B2518 /* EmmmPullMenuView.m */; };
 		083DF4061FE17F3700368956 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 083DF4051FE17F3700368956 /* AppDelegate.m */; };
 		083DF40E1FE17F3700368956 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 083DF40D1FE17F3700368956 /* Assets.xcassets */; };
 		083DF4111FE17F3700368956 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 083DF40F1FE17F3700368956 /* LaunchScreen.storyboard */; };
@@ -18,11 +19,16 @@
 		083E32E81FEC15FB0032AABA /* SocketRocketUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 083E32E71FEC15FA0032AABA /* SocketRocketUtility.m */; };
 		0857C1511FE60957008B205F /* EmmmAttachmentWrapperView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */; };
 		086443661FEE1759004A1ABB /* MyDataBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 086443641FEE1759004A1ABB /* MyDataBase.m */; };
+		08E3F4E71FF35791007C835F /* EmmmChatTableViewTowardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E3F4E61FF35791007C835F /* EmmmChatTableViewTowardCell.m */; };
+		08E3F4EA1FF357B9007C835F /* EmmmChatTableViewReceivedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E3F4E91FF357B9007C835F /* EmmmChatTableViewReceivedCell.m */; };
+		08E3F4EE1FF372B9007C835F /* EmmmMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 08E3F4ED1FF372B9007C835F /* EmmmMessage.m */; };
 		08FB98651FE3AA7A00EC5AFC /* EmmmChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */; };
 		44F23131263126A09317A748 /* libPods-emmmChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A3FD45190D122A1D99D86487 /* libPods-emmmChat.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0836E0361FF72BAE004B2518 /* EmmmPullMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmPullMenuView.h; sourceTree = "<group>"; };
+		0836E0371FF72BAE004B2518 /* EmmmPullMenuView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmPullMenuView.m; sourceTree = "<group>"; };
 		083DF4011FE17F3700368956 /* emmmChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = emmmChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		083DF4041FE17F3700368956 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		083DF4051FE17F3700368956 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -44,6 +50,12 @@
 		0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmAttachmentWrapperView.m; sourceTree = "<group>"; };
 		086443641FEE1759004A1ABB /* MyDataBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDataBase.m; sourceTree = "<group>"; };
 		086443651FEE1759004A1ABB /* MyDataBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDataBase.h; sourceTree = "<group>"; };
+		08E3F4E51FF35791007C835F /* EmmmChatTableViewTowardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmChatTableViewTowardCell.h; sourceTree = "<group>"; };
+		08E3F4E61FF35791007C835F /* EmmmChatTableViewTowardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmChatTableViewTowardCell.m; sourceTree = "<group>"; };
+		08E3F4E81FF357B9007C835F /* EmmmChatTableViewReceivedCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmChatTableViewReceivedCell.h; sourceTree = "<group>"; };
+		08E3F4E91FF357B9007C835F /* EmmmChatTableViewReceivedCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmChatTableViewReceivedCell.m; sourceTree = "<group>"; };
+		08E3F4EC1FF372B9007C835F /* EmmmMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmMessage.h; sourceTree = "<group>"; };
+		08E3F4ED1FF372B9007C835F /* EmmmMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmMessage.m; sourceTree = "<group>"; };
 		08FB98631FE3AA7A00EC5AFC /* EmmmChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmmmChatViewController.h; sourceTree = "<group>"; };
 		08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmmmChatViewController.m; sourceTree = "<group>"; };
 		A3FD45190D122A1D99D86487 /* libPods-emmmChat.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-emmmChat.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,30 +96,62 @@
 		083DF4031FE17F3700368956 /* emmmChat */ = {
 			isa = PBXGroup;
 			children = (
+				08E3F4EB1FF37285007C835F /* Model */,
+				08E3F4E41FF35711007C835F /* Cell */,
+				086443691FEFD2CD004A1ABB /* support Class */,
 				083DF4041FE17F3700368956 /* AppDelegate.h */,
 				083DF4051FE17F3700368956 /* AppDelegate.m */,
-				083E32E61FEC15FA0032AABA /* SocketRocketUtility.h */,
-				083E32E71FEC15FA0032AABA /* SocketRocketUtility.m */,
 				083DF41A1FE1810C00368956 /* LoginViewController.h */,
 				083DF41B1FE1810C00368956 /* LoginViewController.m */,
 				083DF4251FE2721100368956 /* EmmmMainViewController.h */,
 				083DF4261FE2721100368956 /* EmmmMainViewController.m */,
+				0836E0361FF72BAE004B2518 /* EmmmPullMenuView.h */,
+				0836E0371FF72BAE004B2518 /* EmmmPullMenuView.m */,
 				08FB98631FE3AA7A00EC5AFC /* EmmmChatViewController.h */,
 				08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */,
 				0857C14F1FE60957008B205F /* EmmmAttachmentWrapperView.h */,
 				0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */,
-				083DF41F1FE2625700368956 /* EmmmContactCell.h */,
-				083DF4201FE2625700368956 /* EmmmContactCell.m */,
-				083DF4221FE2644500368956 /* EmmmContact.h */,
-				083DF4231FE2644500368956 /* EmmmContact.m */,
-				086443651FEE1759004A1ABB /* MyDataBase.h */,
-				086443641FEE1759004A1ABB /* MyDataBase.m */,
 				083DF40D1FE17F3700368956 /* Assets.xcassets */,
 				083DF40F1FE17F3700368956 /* LaunchScreen.storyboard */,
 				083DF4121FE17F3700368956 /* Info.plist */,
 				083DF4131FE17F3700368956 /* main.m */,
 			);
 			path = emmmChat;
+			sourceTree = "<group>";
+		};
+		086443691FEFD2CD004A1ABB /* support Class */ = {
+			isa = PBXGroup;
+			children = (
+				086443651FEE1759004A1ABB /* MyDataBase.h */,
+				086443641FEE1759004A1ABB /* MyDataBase.m */,
+				083E32E61FEC15FA0032AABA /* SocketRocketUtility.h */,
+				083E32E71FEC15FA0032AABA /* SocketRocketUtility.m */,
+			);
+			path = "support Class";
+			sourceTree = "<group>";
+		};
+		08E3F4E41FF35711007C835F /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				083DF41F1FE2625700368956 /* EmmmContactCell.h */,
+				083DF4201FE2625700368956 /* EmmmContactCell.m */,
+				08E3F4E51FF35791007C835F /* EmmmChatTableViewTowardCell.h */,
+				08E3F4E61FF35791007C835F /* EmmmChatTableViewTowardCell.m */,
+				08E3F4E81FF357B9007C835F /* EmmmChatTableViewReceivedCell.h */,
+				08E3F4E91FF357B9007C835F /* EmmmChatTableViewReceivedCell.m */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		08E3F4EB1FF37285007C835F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				083DF4221FE2644500368956 /* EmmmContact.h */,
+				083DF4231FE2644500368956 /* EmmmContact.m */,
+				08E3F4EC1FF372B9007C835F /* EmmmMessage.h */,
+				08E3F4ED1FF372B9007C835F /* EmmmMessage.m */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		4F9071219AE6C2C15D1728F3 /* Frameworks */ = {
@@ -254,12 +298,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08E3F4EA1FF357B9007C835F /* EmmmChatTableViewReceivedCell.m in Sources */,
 				083DF41C1FE1810C00368956 /* LoginViewController.m in Sources */,
 				083E32E81FEC15FB0032AABA /* SocketRocketUtility.m in Sources */,
 				083DF4271FE2721100368956 /* EmmmMainViewController.m in Sources */,
+				0836E0381FF72BAE004B2518 /* EmmmPullMenuView.m in Sources */,
 				083DF4211FE2625700368956 /* EmmmContactCell.m in Sources */,
+				08E3F4EE1FF372B9007C835F /* EmmmMessage.m in Sources */,
 				086443661FEE1759004A1ABB /* MyDataBase.m in Sources */,
 				083DF4141FE17F3700368956 /* main.m in Sources */,
+				08E3F4E71FF35791007C835F /* EmmmChatTableViewTowardCell.m in Sources */,
 				08FB98651FE3AA7A00EC5AFC /* EmmmChatViewController.m in Sources */,
 				083DF4061FE17F3700368956 /* AppDelegate.m in Sources */,
 				083DF4241FE2644500368956 /* EmmmContact.m in Sources */,
