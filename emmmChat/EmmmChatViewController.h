@@ -13,6 +13,7 @@
 #import "EmmmChatTableViewTowardCell.h"
 #import "EmmmChatTableViewReceivedCell.h"
 #import "EmmmMessage.h"
+#import "MyDataBase.h"
 
 @interface EmmmChatViewController : UIViewController<UITextViewDelegate,UIGestureRecognizerDelegate,UITableViewDelegate,UITableViewDataSource>
 @property(strong,nonatomic)UIImage * myIcon;

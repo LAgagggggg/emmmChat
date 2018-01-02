@@ -14,11 +14,17 @@
     for (UIView *subview in [self.contentView subviews]) {
         [subview removeFromSuperview];
     }
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.mas_right);
+        make.left.equalTo(self.mas_left);
+        make.top.equalTo(self.mas_top);
+        make.bottom.equalTo(self.mas_bottom);
+    }];
     self.backgroundColor=[UIColor clearColor];
     self.iconView=[[UIImageView alloc]initWithImage:icon];
     [self.contentView addSubview:self.iconView];
     [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.mas_right).with.offset(-15);
+        make.right.equalTo(self.contentView.mas_right).with.offset(-15);
         make.top.equalTo(self.contentView.mas_top).with.offset(7.5);
         make.height.equalTo(@(45));
         make.width.equalTo(@(45));

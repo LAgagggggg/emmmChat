@@ -19,15 +19,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window=[[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
     NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
-    UINavigationController * nvc;
+    UINavigationController * nvc=[[UINavigationController alloc]init];
+    LoginViewController * loginvc=[[LoginViewController alloc]init];
     if ([defaults boolForKey:@"loginSuccessJudge"]) {
         NSString * userName=[defaults objectForKey:@"loginSuccessUserName"];
-        EmmmMainViewController * vc=[[EmmmMainViewController alloc]initWithUserName:userName];
-        nvc=[[UINavigationController alloc]initWithRootViewController:vc];
+        EmmmMainViewController * mainvc=[[EmmmMainViewController alloc]initWithUserName:userName];
+        [nvc setViewControllers:@[loginvc,mainvc] animated:YES];
     }
     else{
-        LoginViewController * vc=[[LoginViewController alloc]init];
-        nvc=[[UINavigationController alloc]initWithRootViewController:vc];
+        [nvc pushViewController:loginvc animated:YES];
     }
     self.window.rootViewController = nvc;
     nvc.navigationBar.hidden=YES;

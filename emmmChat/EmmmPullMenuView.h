@@ -11,5 +11,9 @@
 
 @interface EmmmPullMenuView : UIView
 @property (strong,nonatomic)UIView * actualMenuView;
+@property(strong,nonatomic)UIImageView * iconImageView;
 @property CGFloat setedPushWidth;
+
+-(instancetype)initWithIcon:(UIImage *)icon andTapGestureRecognizer:(UITapGestureRecognizer *)tap;
+-(void)setAvatar:(UIImage *)avatar;
 @end

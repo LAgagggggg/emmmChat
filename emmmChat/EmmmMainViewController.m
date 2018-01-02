@@ -116,11 +116,44 @@ static float scrollStartPosition;
     scrollStartPosition=self.contactTableView.contentOffset.y;
     self.myIcon=[UIImage imageNamed:@"ScreenShot"];
     //添加侧拉菜单
-    self.pullMenuView=[[EmmmPullMenuView alloc]init];
+    UITapGestureRecognizer * tapToChooseAvatar=[[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapToChooseAvatar:)];
+    self.pullMenuView=[[EmmmPullMenuView alloc]initWithIcon:self.myIcon andTapGestureRecognizer:tapToChooseAvatar];
     [self.view addSubview:self.pullMenuView];
     UIPanGestureRecognizer * pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
     [self.pullMenuView addGestureRecognizer:pan];
+    self.pullMenuView.hidden=YES;
     return self;
+}
+
+-(void)tapToChooseAvatar:(UITapGestureRecognizer *)tap{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert addAction:[UIAlertAction actionWithTitle:@"从相册选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+            UIImagePickerController * library=[[UIImagePickerController alloc]init];
+            NSArray * availableType =[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+            library.mediaTypes=availableType;
+            library.sourceType=UIImagePickerControllerSourceTypePhotoLibrary;
+            library.delegate=self;
+            library.allowsEditing=YES;
+            [self presentViewController:library animated:YES completion:nil];
+        }
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){
+        UIImagePickerController *PickerImage = [[UIImagePickerController alloc]init];
+        PickerImage.sourceType = UIImagePickerControllerSourceTypeCamera;
+        PickerImage.allowsEditing = YES;
+        PickerImage.delegate = self;
+        [self presentViewController:PickerImage animated:YES completion:nil];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+    UIImage * newAvatar=[info objectForKey:@"UIImagePickerControllerEditedImage"];
+    self.myIcon=newAvatar;
+    [self.pullMenuView setAvatar:self.myIcon];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)pan:(UIPanGestureRecognizer *)pan{
@@ -167,7 +200,13 @@ static float scrollStartPosition;
             BOOL result = [self.db executeUpdate:sql];
             if (result)
             {
-                NSLog(@"创建表成功");
+                NSLog(@"创建%@成功",self.tableName);
+            }
+            sql=@"CREATE TABLE IF NOT EXISTS msgT (fromUser text, toUser text, content text,create_time datetime);";
+            result = [self.db executeUpdate:sql];
+            if (result)
+            {
+                NSLog(@"创建msgT成功");
             }
             sql = [NSString stringWithFormat:@"SELECT * FROM %@",self.tableName];
             FMResultSet *resultSet = [self.db executeQuery:sql];
@@ -191,8 +230,6 @@ static float scrollStartPosition;
     NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"loginSuccessJudge"];
     [self.navigationController popViewControllerAnimated:YES];
-    LoginViewController * vc=[[LoginViewController alloc]init];
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)viewDidLoad {
@@ -204,6 +241,11 @@ static float scrollStartPosition;
     if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
         self.navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
+    self.pullMenuView.hidden=NO;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    self.pullMenuView.hidden=YES;
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {

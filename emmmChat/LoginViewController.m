@@ -138,7 +138,7 @@
     }];
     //确定按钮
     self.submitBtn=[UIButton buttonWithType:UIButtonTypeSystem];
-    self.submitBtn.backgroundColor=darkBlueColor;
+    self.submitBtn.backgroundColor=[UIColor grayColor];
     [self.submitBtn setTitle:@"登陆" forState:UIControlStateNormal];
     [self.submitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.submitBtn setFont:[UIFont systemFontOfSize:20 weight:UIFontWeightBold]];
@@ -153,7 +153,7 @@
         make.right.equalTo(self.view.mas_right).with.offset(-33);
         make.bottom.equalTo(self.view.mas_bottom).with.offset(-201.5);
     }];
-    [self.submitBtn addTarget:self action:@selector(TryLogin) forControlEvents:UIControlEventTouchUpInside];
+    [self.submitBtn addTarget:self action:@selector(Submit) forControlEvents:UIControlEventTouchUpInside];
     return self;
 }
 
@@ -194,22 +194,46 @@
     
 }
 
--(void)TryLogin{
-    //判断账号密码是否正确
-    if([self.accountTextField.text isEqualToString:@"lagagggggg"]
-       &&[self.passwordTextField.text isEqualToString:@"19970720"]){
-        self.loginSuccess=1;
-        self.loginSuccessUserName=self.accountTextField.text;
+-(void)Submit{
+    [self.accountTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    NSString * account=self.accountTextField.text;
+    NSString * password=self.passwordTextField.text;
+    if (self.loginOrRegister ==1) {
+        [self tryLoginWithAccount:account andPassword:password];
     }
-    else{
+}
+-(void)tryLoginWithAccount:(NSString *)account andPassword:(NSString *)password {
+    MBProgressHUD * hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [hud hideAnimated:YES];
+        if([account isEqualToString:@"lagagggggg"]
+           &&[password isEqualToString:@"19970720"]){
+            self.loginSuccess=1;
+            self.loginSuccessUserName=account;
+        }
+        else{
+            MBProgressHUD* hud1=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud1.mode=MBProgressHUDModeText;
+            hud1.label.text=@"登陆失败";
+            [hud1 hideAnimated:YES afterDelay:1.0];
+        }
+        if (self.loginSuccess) {
+            NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
+            [defaults setBool:self.loginSuccess forKey:@"loginSuccessJudge"];
+            [defaults setObject:self.loginSuccessUserName forKey:@"loginSuccessUserName"];
+            MBProgressHUD *hud2=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud2.mode=MBProgressHUDModeText;
+            hud2.label.text=@"登陆成功";
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [hud2 hideAnimated:YES];
+                [self JumpToMainInterface];
+            });
+        }
+    });
+}
 
-    }
-    if (self.loginSuccess) {
-        NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
-        [defaults setBool:self.loginSuccess forKey:@"loginSuccessJudge"];
-        [defaults setObject:self.loginSuccessUserName forKey:@"loginSuccessUserName"];
-        [self JumpToMainInterface];
-    }
+-(void)tryRegisterWithAccount:(NSString *)account andPassword:(NSString *)password{
     
 }
 
@@ -223,6 +247,12 @@
     // Do any additional setup after loading the view.
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    self.accountTextField.text=nil;
+    self.passwordTextField.text=nil;
+    [self SwitchToLogin];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -233,7 +263,7 @@
     [self.passwordTextField resignFirstResponder];
 }
 
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{                      
     NSString * accountText=self.accountTextField.text;
     NSString * passwordText=self.passwordTextField.text;
     if (textField==self.accountTextField) {
@@ -245,9 +275,11 @@
     if (accountText.length!=0&&
         passwordText.length!=0) {
         self.submitBtn.enabled=YES;
+        self.submitBtn.backgroundColor=darkBlueColor;
     }
     else{
         self.submitBtn.enabled=NO;
+        self.submitBtn.backgroundColor=[UIColor grayColor];
     }
     return YES;
 }
@@ -259,7 +291,8 @@
     else if(textField==self.passwordTextField){
         if (self.accountTextField.text.length!=0&&
             self.passwordTextField.text.length!=0) {
-            [self TryLogin];
+            [self.passwordTextField resignFirstResponder];
+            [self Submit];
         }
     }
     return YES;

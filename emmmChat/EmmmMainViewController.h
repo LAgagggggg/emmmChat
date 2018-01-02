@@ -15,7 +15,7 @@
 #import "EmmmChatViewController.h"
 #import "EmmmPullMenuView.h"
 
-@interface EmmmMainViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIGestureRecognizerDelegate>
+@interface EmmmMainViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIGestureRecognizerDelegate,UIGestureRecognizerDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 @property(strong,nonatomic)NSString * userName;
 -(instancetype)initWithUserName:(NSString*)userName;
 

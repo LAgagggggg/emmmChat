@@ -26,6 +26,7 @@
 @property(strong,nonatomic)NSMutableArray * messagesArr;
 @property CGFloat currentTableViewInset;
 @property BOOL btnsAlreadyPoped;
+@property MyDataBase * db;
 @end
 
 @implementation EmmmChatViewController
@@ -125,7 +126,7 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     self.chatTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.chatTableView registerClass:[EmmmChatTableViewTowardCell class] forCellReuseIdentifier:myReuseIdentifier];
     [self.chatTableView registerClass:[EmmmChatTableViewReceivedCell class] forCellReuseIdentifier:friendRuseIdentifier];
-    self.chatTableView.estimatedRowHeight=44;
+    self.chatTableView.estimatedRowHeight=80;
     self.chatTableView.rowHeight=UITableViewAutomaticDimension;
     self.chatTableView.delegate=self;
     self.chatTableView.dataSource=self;
@@ -140,13 +141,16 @@ static NSString * const friendRuseIdentifier = @"friendCell";
 -(NSMutableArray *)messagesArr{
     if (!_messagesArr) {
         _messagesArr=[[NSMutableArray alloc]init];
-        EmmmMessage * msg1=[[EmmmMessage alloc]initMessageWithText:@"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" andFrom:self.userName To:self.friendName];
-        EmmmMessage * msg2=[[EmmmMessage alloc]initMessageWithText:@"永和有永和路，中和有中和路，中和的中和路有接永和的中和路，永和的永和路沒接中和的永和路；永和的中和路有接永和的永和路，中和的永和路沒接中和的中和路。永和有中正路，中和有中正路，永和的中正路用景平路接中和的中正路；永和有中山路，中和有中山路，永和的中山路直接接上了中和的中山路。永和的中正路接上了永和的中山路，中和的中正路卻不接中和的中山路。中正橋下來不是中正路，但永和有中正路；秀朗橋下來也不是秀朗路，但永和也有秀朗路。永福橋下來不是永福路，永和沒有永福路；福和橋下來不是福和路，但福和路接的是永福橋。" andFrom:self.userName To:self.friendName];
-        EmmmMessage * msg3=[[EmmmMessage alloc]initMessageWithText:@"黑化黑灰化肥黑灰会挥发发灰黑化肥黑灰化肥挥发；灰化灰黑化肥灰黑会发挥发黑灰化肥灰黑化肥发挥" andFrom:self.userName To:self.friendName];
-        EmmmMessage * msg4=[[EmmmMessage alloc]initMessageWithText:@"hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh" andFrom:self.userName To:self.friendName];
-        EmmmMessage * msg5=[[EmmmMessage alloc]initMessageWithText:@"永和有永和路，中和有中和路，中和的中和路有接永和的中和路，永和的永和路沒接中和的永和路；永和的中和路有接永和的永和路，中和的永和路沒接中和的中和路。永和有中正路，中和有中正路，永和的中正路用景平路接中和的中正路；永和有中山路，中和有中山路，永和的中山路直接接上了中和的中山路。永和的中正路接上了永和的中山路，中和的中正路卻不接中和的中山路。中正橋下來不是中正路，但永和有中正路；秀朗橋下來也不是秀朗路，但永和也有秀朗路。永福橋下來不是永福路，永和沒有永福路；福和橋下來不是福和路，但福和路接的是永福橋。" andFrom:self.userName To:self.friendName];
-        EmmmMessage * msg6=[[EmmmMessage alloc]initMessageWithText:@"黑化黑灰化肥黑灰会挥发发灰黑化肥黑灰化肥挥发；灰化灰黑化肥灰黑会发挥发黑灰化肥灰黑化肥发挥" andFrom:self.userName To:self.friendName];
-        [_messagesArr addObjectsFromArray:@[msg1,msg2,msg3,msg4,msg5,msg6]];
+        self.db=[MyDataBase sharedInstance];
+        if ([self.db open])
+        {
+            FMResultSet *resultSet = [self.db executeQuery:@"select * from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?) LIMIT 0,20;",self.userName,self.friendName,self.friendName,self.userName];
+            while ([resultSet next]) {
+                EmmmMessage * msg=[[EmmmMessage alloc]initMessageWithText:[resultSet stringForColumn:@"content"] andFrom:[resultSet stringForColumn:@"fromUser"] To:[resultSet stringForColumn:@"toUser"]];
+                msg.sentDate=[resultSet dateForColumn:@"create_time"];
+                [self.messagesArr addObject:msg];
+            }
+        }
     }
     return _messagesArr;
 }
@@ -205,9 +209,12 @@ static NSString * const friendRuseIdentifier = @"friendCell";
 }
 //监控textview改变
 -(void)textViewDidChange:(UITextView *)textView{//TextView自适应尺寸
+    [self keepUICorrect];
+}
+-(void)keepUICorrect{
     //保存包裹textview的view的y值
     float wrappperViewY=self.bottomMessageView.frame.origin.y;
-    float originalHeight=textView.frame.size.height;
+    float originalHeight=self.messageInputView.frame.size.height;
     CGPoint p1=[self.messageInputView convertPoint:self.messageInputView.frame.origin toView:self.view];
     //获取合适的高度
     float textViewHeight =  [self.messageInputView sizeThatFits:CGSizeMake(self.messageInputView.frame.size.width, MAXFLOAT)].height;
@@ -229,10 +236,11 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     self.bottomMessageView.frame=frame;
     CGPoint p2=[self.messageInputView convertPoint:self.messageInputView.frame.origin toView:self.view];
     CGFloat change=p1.y-p2.y;
-    NSLog(@"%lf",change);
-    self.currentTableViewInset+=change;
-    self.chatTableView.contentInset = UIEdgeInsetsMake(0, 0,self.currentTableViewInset,0);
-    [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
+    if(self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset>0){
+        self.currentTableViewInset+=change;
+        self.chatTableView.contentInset = UIEdgeInsetsMake(0, 0,self.currentTableViewInset,0);
+        [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
+    }
 }
 //弹出键盘时
 -(void)keyboardWillShow:(NSNotification *)notification{
@@ -241,8 +249,11 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     CGRect keyboardRect = [value CGRectValue];
     //tableView滚动
     self.currentTableViewInset=keyboardRect.size.height;
-    self.chatTableView.contentInset = UIEdgeInsetsMake(0, 0,self.currentTableViewInset,0);
-    [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
+     NSLog(@"%lf---%lf",self.chatTableView.contentSize.height,self.chatTableView.frame.size.height);
+    if(self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset>0){
+        self.chatTableView.contentInset = UIEdgeInsetsMake(0, 0,self.currentTableViewInset,0);
+        [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
+    }
     CGRect frame=self.bottomMessageView.frame;
     frame.origin.y=keyboardRect.origin.y-frame.size.height;
     self.bottomMessageView.frame=frame;
@@ -252,6 +263,7 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     if ([text isEqualToString:@"\n"]) {
         [self SendTextMessage:self.messageInputView.text];
         self.messageInputView.text=@"";
+        [self keepUICorrect];
         return NO;
     }
     return YES;
@@ -261,8 +273,13 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     EmmmMessage * msg=[[EmmmMessage alloc]initMessageWithText:text andFrom:self.userName To:self.friendName];
     [self.messagesArr addObject:msg];
     [self.chatTableView reloadData];
-    [self.view layoutIfNeeded];
-    [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
+    if ([msg WriteWithFMDB:self.db andTableName:@"msgT"]) {
+        NSLog(@"信息写入成功");
+    }
+    if(self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset>0){
+        [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
+    }
+    
 }
 //返回键
 -(void)returnToMain{
@@ -277,11 +294,13 @@ static NSString * const friendRuseIdentifier = @"friendCell";
 //设置右滑返回
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height) animated:NO]; 
+    [self.view layoutIfNeeded];
+    if(self.chatTableView.contentSize.height>self.chatTableView.frame.size.height){
+        [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height) animated:NO];
+    }
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height) animated:NO]; 
 }
 //识别点击注销textview
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
@@ -306,7 +325,7 @@ static NSString * const friendRuseIdentifier = @"friendCell";
         return cell;
     }
     else{
-        EmmmChatTableViewTowardCell * cell=[self.chatTableView dequeueReusableCellWithIdentifier:myReuseIdentifier forIndexPath:indexPath];
+        EmmmChatTableViewReceivedCell * cell=[self.chatTableView dequeueReusableCellWithIdentifier:friendRuseIdentifier forIndexPath:indexPath];
         [cell setWithIcon:self.friendIcon andMessage:msg];
         return cell;
     }

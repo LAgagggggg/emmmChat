@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MyDataBase.h"
 
 @interface EmmmMessage : NSObject
 @property(strong,nonatomic)NSString * text;
@@ -15,4 +16,5 @@
 @property(strong,nonatomic)NSDate * sentDate;
 
 -(instancetype)initMessageWithText:(NSString *)text andFrom:(NSString *)fromUser To:(NSString *)toUser;
+-(BOOL)WriteWithFMDB:(MyDataBase *)db andTableName:(NSString *)tableName;
 @end

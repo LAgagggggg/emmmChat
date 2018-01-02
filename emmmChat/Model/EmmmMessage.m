@@ -20,4 +20,11 @@
     return self;
 }
 
+-(BOOL)WriteWithFMDB:(MyDataBase *)db andTableName:(NSString *)tableName{
+    BOOL result;
+    NSString * sql=[NSString stringWithFormat:@"insert into %@(fromUser, toUser, content ,create_time) VALUES(?,?,?,?);",tableName];
+    result=[db executeUpdate:sql,self.fromUser,self.toUser,self.text,self.sentDate];
+    return result;
+}
+
 @end
