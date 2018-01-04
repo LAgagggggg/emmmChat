@@ -11,6 +11,7 @@
 #define lightBlueColor [UIColor colorWithRed:225/255. green:238/255. blue:253/255. alpha:1]
 #define MAXHEIGHTofInputView 80.f
 #define INITHEIGHTOFINPUTVIEW 32
+#define MSG_EACH_FETCH 5
 
 #import "EmmmChatViewController.h"
 
@@ -24,8 +25,11 @@
 @property(strong,nonatomic)NSString * friendName;
 @property(strong,nonatomic)UITableView * chatTableView;
 @property(strong,nonatomic)NSMutableArray * messagesArr;
+@property(strong,nonatomic)UIActivityIndicatorView *reloadIndicator;
 @property CGFloat currentTableViewInset;
 @property BOOL btnsAlreadyPoped;
+@property NSInteger sqlFetchFromIndex;
+@property BOOL reloadLock;
 @property MyDataBase * db;
 @end
 
@@ -121,8 +125,16 @@ static NSString * const friendRuseIdentifier = @"friendCell";
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.bottom.equalTo(self.bottomMessageView.mas_top);
-        make.top.equalTo(self.navigationView.mas_bottom);
+        make.top.equalTo(self.navigationView.mas_top);
     }];
+    self.chatTableView.tableHeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 41.5)];
+    UIView * HeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 41.5)];
+    HeaderView.backgroundColor=[UIColor clearColor];
+    [self.chatTableView.tableHeaderView addSubview:HeaderView];
+    self.reloadIndicator= [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.reloadIndicator.center = HeaderView.center;
+    [HeaderView addSubview:self.reloadIndicator];
+    [self.reloadIndicator setHidesWhenStopped:NO];
     self.chatTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.chatTableView registerClass:[EmmmChatTableViewTowardCell class] forCellReuseIdentifier:myReuseIdentifier];
     [self.chatTableView registerClass:[EmmmChatTableViewReceivedCell class] forCellReuseIdentifier:friendRuseIdentifier];
@@ -144,13 +156,22 @@ static NSString * const friendRuseIdentifier = @"friendCell";
         self.db=[MyDataBase sharedInstance];
         if ([self.db open])
         {
-            FMResultSet *resultSet = [self.db executeQuery:@"select * from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?) LIMIT 0,20;",self.userName,self.friendName,self.friendName,self.userName];
+            NSUInteger count = [self.db intForQuery:@"select count(*) from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?);",self.userName,self.friendName,self.friendName,self.userName];
+            self.sqlFetchFromIndex=count-MSG_EACH_FETCH;
+            if (self.sqlFetchFromIndex<0) {
+                self.sqlFetchFromIndex=0;
+            }
+            NSString * sql=[NSString stringWithFormat:@"select * from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?) LIMIT %ld,%d;",(long)self.sqlFetchFromIndex,MSG_EACH_FETCH];
+            FMResultSet *resultSet = [self.db executeQuery:sql,self.userName,self.friendName,self.friendName,self.userName];
             while ([resultSet next]) {
                 EmmmMessage * msg=[[EmmmMessage alloc]initMessageWithText:[resultSet stringForColumn:@"content"] andFrom:[resultSet stringForColumn:@"fromUser"] To:[resultSet stringForColumn:@"toUser"]];
                 msg.sentDate=[resultSet dateForColumn:@"create_time"];
                 [self.messagesArr addObject:msg];
             }
+            [resultSet close];
         }
+
+        [self.db close];
     }
     return _messagesArr;
 }
@@ -249,7 +270,6 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     CGRect keyboardRect = [value CGRectValue];
     //tableView滚动
     self.currentTableViewInset=keyboardRect.size.height;
-     NSLog(@"%lf---%lf",self.chatTableView.contentSize.height,self.chatTableView.frame.size.height);
     if(self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset>0){
         self.chatTableView.contentInset = UIEdgeInsetsMake(0, 0,self.currentTableViewInset,0);
         [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
@@ -273,8 +293,11 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     EmmmMessage * msg=[[EmmmMessage alloc]initMessageWithText:text andFrom:self.userName To:self.friendName];
     [self.messagesArr addObject:msg];
     [self.chatTableView reloadData];
-    if ([msg WriteWithFMDB:self.db andTableName:@"msgT"]) {
-        NSLog(@"信息写入成功");
+    if ([self.db open]) {
+        if ([msg WriteWithFMDB:self.db andTableName:@"msgT"]) {
+            NSLog(@"信息写入成功");
+        }
+        [self.db close];
     }
     if(self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset>0){
         [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height+self.currentTableViewInset) animated:YES];
@@ -289,19 +312,14 @@ static NSString * const friendRuseIdentifier = @"friendCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self.chatTableView reloadData];//设置tableview出现在最底端
+    dispatch_async(dispatch_get_main_queue(),^{
+        if (self.chatTableView.contentSize.height >self.chatTableView.frame.size.height) {
+            [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height -self.chatTableView.bounds.size.height) animated:NO];
+        }
+    });
 }
 
-//设置右滑返回
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.view layoutIfNeeded];
-    if(self.chatTableView.contentSize.height>self.chatTableView.frame.size.height){
-        [self.chatTableView setContentOffset:CGPointMake(0, self.chatTableView.contentSize.height-self.chatTableView.frame.size.height) animated:NO];
-    }
-}
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-}
 //识别点击注销textview
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     if (![touch.view isDescendantOfView:self.messageInputView]) {
@@ -333,6 +351,52 @@ static NSString * const friendRuseIdentifier = @"friendCell";
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.messagesArr.count;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.contentOffset.y<-60) {
+        [scrollView setContentOffset:CGPointMake(0, -60) animated:NO];
+    }
+    NSLog(@"%lf",scrollView.contentSize.height);
+}
+
+-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    if (scrollView.contentOffset.y<=-60&&self.reloadLock==NO) {
+        float beforeHeight= scrollView.contentSize.height;
+        self.reloadLock=YES;
+        if (self.sqlFetchFromIndex>0) {
+            [scrollView setContentInset:UIEdgeInsetsMake(60, 0, 0, 0)];
+            [self.reloadIndicator startAnimating];
+            self.sqlFetchFromIndex-=MSG_EACH_FETCH;
+            if (self.sqlFetchFromIndex<0) {
+                self.sqlFetchFromIndex=0;
+            }
+            if ([self.db open]) {
+                NSString * sql=[NSString stringWithFormat:@"select * from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?) LIMIT %ld,%d;",(long)self.sqlFetchFromIndex,MSG_EACH_FETCH];
+                FMResultSet *resultSet = [self.db executeQuery:sql,self.userName,self.friendName,self.friendName,self.userName];
+                NSMutableArray * temp=[[NSMutableArray alloc]init];
+                while ([resultSet next]) {
+                    EmmmMessage * msg=[[EmmmMessage alloc]initMessageWithText:[resultSet stringForColumn:@"content"] andFrom:[resultSet stringForColumn:@"fromUser"] To:[resultSet stringForColumn:@"toUser"]];
+                    msg.sentDate=[resultSet dateForColumn:@"create_time"];
+                    [temp insertObject:msg atIndex:0];
+                }
+                for (EmmmMessage * msg in temp) {
+                    [self.messagesArr insertObject:msg atIndex:0];
+                }
+                [resultSet close];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    self.reloadLock=NO;
+                    [self.reloadIndicator stopAnimating];
+                    [self.chatTableView reloadData];
+                    float currHeight= scrollView.contentSize.height;
+                    [scrollView setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+                    [scrollView setContentOffset:CGPointMake(0,currHeight-beforeHeight-60) animated:NO];
+                });
+            }
+            [self.db close];
+        }
+    }
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

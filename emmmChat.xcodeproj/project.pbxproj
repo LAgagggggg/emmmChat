@@ -97,7 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				08E3F4EB1FF37285007C835F /* Model */,
-				08E3F4E41FF35711007C835F /* Cell */,
+				08E3F4E41FF35711007C835F /* CellAndView */,
 				086443691FEFD2CD004A1ABB /* support Class */,
 				083DF4041FE17F3700368956 /* AppDelegate.h */,
 				083DF4051FE17F3700368956 /* AppDelegate.m */,
@@ -105,12 +105,8 @@
 				083DF41B1FE1810C00368956 /* LoginViewController.m */,
 				083DF4251FE2721100368956 /* EmmmMainViewController.h */,
 				083DF4261FE2721100368956 /* EmmmMainViewController.m */,
-				0836E0361FF72BAE004B2518 /* EmmmPullMenuView.h */,
-				0836E0371FF72BAE004B2518 /* EmmmPullMenuView.m */,
 				08FB98631FE3AA7A00EC5AFC /* EmmmChatViewController.h */,
 				08FB98641FE3AA7A00EC5AFC /* EmmmChatViewController.m */,
-				0857C14F1FE60957008B205F /* EmmmAttachmentWrapperView.h */,
-				0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */,
 				083DF40D1FE17F3700368956 /* Assets.xcassets */,
 				083DF40F1FE17F3700368956 /* LaunchScreen.storyboard */,
 				083DF4121FE17F3700368956 /* Info.plist */,
@@ -130,7 +126,7 @@
 			path = "support Class";
 			sourceTree = "<group>";
 		};
-		08E3F4E41FF35711007C835F /* Cell */ = {
+		08E3F4E41FF35711007C835F /* CellAndView */ = {
 			isa = PBXGroup;
 			children = (
 				083DF41F1FE2625700368956 /* EmmmContactCell.h */,
@@ -139,8 +135,12 @@
 				08E3F4E61FF35791007C835F /* EmmmChatTableViewTowardCell.m */,
 				08E3F4E81FF357B9007C835F /* EmmmChatTableViewReceivedCell.h */,
 				08E3F4E91FF357B9007C835F /* EmmmChatTableViewReceivedCell.m */,
+				0857C14F1FE60957008B205F /* EmmmAttachmentWrapperView.h */,
+				0857C1501FE60957008B205F /* EmmmAttachmentWrapperView.m */,
+				0836E0361FF72BAE004B2518 /* EmmmPullMenuView.h */,
+				0836E0371FF72BAE004B2518 /* EmmmPullMenuView.m */,
 			);
-			path = Cell;
+			path = CellAndView;
 			sourceTree = "<group>";
 		};
 		08E3F4EB1FF37285007C835F /* Model */ = {
