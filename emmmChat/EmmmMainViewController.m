@@ -99,8 +99,7 @@ static float scrollStartPosition;
         make.height.equalTo(@(35));
         make.width.equalTo(@(148.f));
     }];
-    [topIconBtn addTarget:self action:@selector(QuitLogin) forControlEvents:UIControlEventTouchUpInside];
-        //切换按钮
+    //切换按钮
     self.switcherWrapper=[[UIView alloc]init];
     [self.topView addSubview:self.switcherWrapper];
     self.switcherWrapper.backgroundColor=lightBlueColor;
@@ -122,6 +121,9 @@ static float scrollStartPosition;
     UIPanGestureRecognizer * pan=[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(pan:)];
     [self.pullMenuView addGestureRecognizer:pan];
     self.pullMenuView.hidden=YES;
+    //侧拉菜单中的两个按钮
+    [self.pullMenuView.logoutBtn addTarget:self action:@selector(QuitLogin) forControlEvents:UIControlEventTouchUpInside];
+    [self.pullMenuView.changePasswordBtn addTarget:self action:@selector(ChangePassword) forControlEvents:UIControlEventTouchUpInside];
     return self;
 }
 
@@ -230,6 +232,32 @@ static float scrollStartPosition;
     NSUserDefaults * defaults=[NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"loginSuccessJudge"];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)ChangePassword{
+    UIAlertController *passwordInput=[UIAlertController alertControllerWithTitle:@"修改密码" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [passwordInput addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"原密码";
+    }];
+    [passwordInput addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"新密码";
+    }];
+    UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action){}];
+    UIAlertAction* confirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action){
+        MBProgressHUD * hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [hud hideAnimated:YES];
+            MBProgressHUD *hud2=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud2.mode=MBProgressHUDModeText;
+            hud2.label.text=@"修改成功";
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [hud2 hideAnimated:YES];
+            });
+        });
+    }];
+    [passwordInput addAction:cancelAction];
+    [passwordInput addAction:confirmAction];
+    [self.navigationController presentViewController:passwordInput animated:YES completion:nil];
 }
 
 - (void)viewDidLoad {

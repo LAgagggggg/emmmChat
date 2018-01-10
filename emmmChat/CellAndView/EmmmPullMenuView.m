@@ -38,6 +38,28 @@
         [self setAvatar:icon];
         self.iconImageView.userInteractionEnabled=YES;
         [self.iconImageView addGestureRecognizer:tap];
+        self.logoutBtn=[UIButton buttonWithType:UIButtonTypeSystem];
+        self.logoutBtn.backgroundColor=[UIColor whiteColor];
+        self.logoutBtn.layer.cornerRadius=10.f;
+        [self.logoutBtn setTitle:@"注销" forState:UIControlStateNormal];
+        [self.actualMenuView addSubview:self.logoutBtn];
+        [self.logoutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.actualMenuView.mas_right).with.offset(-10);
+            make.bottom.equalTo(self.actualMenuView.mas_bottom).with.offset(-20);
+            make.width.equalTo(@(100));
+            make.height.equalTo(@(50));
+        }];
+        self.changePasswordBtn=[UIButton buttonWithType:UIButtonTypeSystem];
+        self.changePasswordBtn.backgroundColor=[UIColor whiteColor];
+        self.changePasswordBtn.layer.cornerRadius=10.f;
+        [self.changePasswordBtn setTitle:@"修改密码" forState:UIControlStateNormal];
+        [self.actualMenuView addSubview:self.changePasswordBtn];
+        [self.changePasswordBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.logoutBtn.mas_left).with.offset(-10);
+            make.bottom.equalTo(self.actualMenuView.mas_bottom).with.offset(-20);
+            make.width.equalTo(@(100));
+            make.height.equalTo(@(50));
+        }];
     }
     return self;
 }

@@ -12,6 +12,8 @@
 @interface EmmmPullMenuView : UIView
 @property (strong,nonatomic)UIView * actualMenuView;
 @property(strong,nonatomic)UIImageView * iconImageView;
+@property(strong,nonatomic)UIButton * changePasswordBtn;
+@property(strong,nonatomic)UIButton * logoutBtn;
 @property CGFloat setedPushWidth;
 
 -(instancetype)initWithIcon:(UIImage *)icon andTapGestureRecognizer:(UITapGestureRecognizer *)tap;

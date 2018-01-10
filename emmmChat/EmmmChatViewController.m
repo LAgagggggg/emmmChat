@@ -11,7 +11,7 @@
 #define lightBlueColor [UIColor colorWithRed:225/255. green:238/255. blue:253/255. alpha:1]
 #define MAXHEIGHTofInputView 80.f
 #define INITHEIGHTOFINPUTVIEW 32
-#define MSG_EACH_FETCH 5
+#define MSG_EACH_FETCH 20
 
 #import "EmmmChatViewController.h"
 
@@ -131,6 +131,7 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     UIView * HeaderView=[[UIView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 41.5)];
     HeaderView.backgroundColor=[UIColor clearColor];
     [self.chatTableView.tableHeaderView addSubview:HeaderView];
+    //菊花
     self.reloadIndicator= [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.reloadIndicator.center = HeaderView.center;
     [HeaderView addSubview:self.reloadIndicator];
@@ -138,12 +139,10 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     self.chatTableView.separatorStyle=UITableViewCellSeparatorStyleNone;
     [self.chatTableView registerClass:[EmmmChatTableViewTowardCell class] forCellReuseIdentifier:myReuseIdentifier];
     [self.chatTableView registerClass:[EmmmChatTableViewReceivedCell class] forCellReuseIdentifier:friendRuseIdentifier];
-    self.chatTableView.estimatedRowHeight=80;
+    self.chatTableView.estimatedRowHeight=75;
     self.chatTableView.rowHeight=UITableViewAutomaticDimension;
     self.chatTableView.delegate=self;
     self.chatTableView.dataSource=self;
-    //kvo监听bottomview的y值变化以上下移动tableView
-//    [self.bottomMessageView addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
     //设置对方信息
     self.friendIcon=contact.iconImage;
     self.friendName=contact.name;
@@ -357,7 +356,7 @@ static NSString * const friendRuseIdentifier = @"friendCell";
     if (scrollView.contentOffset.y<-60) {
         [scrollView setContentOffset:CGPointMake(0, -60) animated:NO];
     }
-    NSLog(@"%lf",scrollView.contentSize.height);
+    NSLog(@"%lf",self.chatTableView.contentSize.height);
 }
 
 -(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
@@ -367,12 +366,16 @@ static NSString * const friendRuseIdentifier = @"friendCell";
         if (self.sqlFetchFromIndex>0) {
             [scrollView setContentInset:UIEdgeInsetsMake(60, 0, 0, 0)];
             [self.reloadIndicator startAnimating];
-            self.sqlFetchFromIndex-=MSG_EACH_FETCH;
-            if (self.sqlFetchFromIndex<0) {
+            NSInteger msgFetchThisTime=MSG_EACH_FETCH;
+            if (self.sqlFetchFromIndex-MSG_EACH_FETCH<0) {
+                msgFetchThisTime=self.sqlFetchFromIndex;
                 self.sqlFetchFromIndex=0;
             }
+            else{
+                self.sqlFetchFromIndex-=msgFetchThisTime;
+            }
             if ([self.db open]) {
-                NSString * sql=[NSString stringWithFormat:@"select * from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?) LIMIT %ld,%d;",(long)self.sqlFetchFromIndex,MSG_EACH_FETCH];
+                NSString * sql=[NSString stringWithFormat:@"select * from msgT where (fromUser=? AND toUser=?) OR (fromUser=? AND toUser=?) LIMIT %ld,%ld;",(long)self.sqlFetchFromIndex,(long)msgFetchThisTime];
                 FMResultSet *resultSet = [self.db executeQuery:sql,self.userName,self.friendName,self.friendName,self.userName];
                 NSMutableArray * temp=[[NSMutableArray alloc]init];
                 while ([resultSet next]) {
@@ -384,14 +387,13 @@ static NSString * const friendRuseIdentifier = @"friendCell";
                     [self.messagesArr insertObject:msg atIndex:0];
                 }
                 [resultSet close];
-                
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.6 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     self.reloadLock=NO;
                     [self.reloadIndicator stopAnimating];
                     [self.chatTableView reloadData];
                     float currHeight= scrollView.contentSize.height;
                     [scrollView setContentInset:UIEdgeInsetsMake(0, 0, 0, 0)];
-                    [scrollView setContentOffset:CGPointMake(0,currHeight-beforeHeight-60) animated:NO];
+                    [scrollView setContentOffset:CGPointMake(0,currHeight-beforeHeight) animated:NO];
                 });
             }
             [self.db close];
